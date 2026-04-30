@@ -6,4 +6,6 @@ export default defineConfig({
   adapter: node({
     mode: "standalone",
   }),
+  site: 'https://thanerik.github.io',
+  base: '/stamtree'
 });
