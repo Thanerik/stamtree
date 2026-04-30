@@ -1,0 +1,17 @@
+{
+  "rootGroupId": "g-helle-einar",
+  "groups": [
+    { "id": "g-helle-einar", "parents": ["helle", "einar"], "children": ["karsten", "richard", "annette"] },
+    { "id": "g-karsten", "parents": ["karsten", "lene"], "children": ["nina", "gitte"] },
+    { "id": "g-richard", "parents": ["richard", "ulla"], "children": ["troels", "magnus"] },
+    { "id": "g-annette", "parents": ["annette", "henrik"], "children": ["hanne", "rie", "kirsten", "svend"] },
+    { "id": "g-troels", "parents": ["troels", "kristina"], "children": ["lucas", "vida", "thora", "embla"] },
+    { "id": "g-magnus", "parents": ["magnus", "astrid"], "children": ["njord", "idun"] },
+    { "id": "g-nina", "parents": ["nina", "troels2"], "children": ["bjork", "gry"] },
+    { "id": "g-gitte", "parents": ["gitte", "salik"], "children": ["ludvig"] },
+    { "id": "g-hanne", "parents": ["hanne", "tom"], "children": ["sigge", "ville", "tidde"] },
+    { "id": "g-rie", "parents": ["rie", "martin"], "children": ["sirius", "luna"] },
+    { "id": "g-kirsten", "parents": ["kirsten", "lasse"], "children": ["lisa", "arne"] },
+    { "id": "g-svend", "parents": ["svend", "lene2"], "children": ["saga", "ida"] }
+  ]
+}

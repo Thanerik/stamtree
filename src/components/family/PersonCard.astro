@@ -1,0 +1,178 @@
+---
+import { Image } from "astro:assets";
+import type { FamilyPerson } from "../../lib/family";
+import SignMedia from "./SignMedia.astro";
+
+interface Props {
+  person: FamilyPerson;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+const { person, x, y, width, height } = Astro.props;
+
+const stillSrc = `/media/${person.id}.jpg`;
+const motionSrc = `/media/${person.id}.gif`;
+const dateFormatter = new Intl.DateTimeFormat("da-DK", {
+  day: "numeric",
+  month: "short",
+  year: "numeric",
+  timeZone: "UTC",
+});
+
+function parseIsoDate(value: string) {
+  const [year, month, day] = value.split("-").map(Number);
+
+  return new Date(Date.UTC(year, month - 1, day));
+}
+
+function formatDate(value?: string) {
+  return value ? dateFormatter.format(parseIsoDate(value)) : undefined;
+}
+
+function getAgeOnDate(birthDate: string, comparisonDate: Date) {
+  const birth = parseIsoDate(birthDate);
+  const comparisonYear = comparisonDate.getUTCFullYear();
+  const comparisonMonth = comparisonDate.getUTCMonth();
+  const comparisonDay = comparisonDate.getUTCDate();
+  let age = comparisonYear - birth.getUTCFullYear();
+
+  if (
+    comparisonMonth < birth.getUTCMonth() ||
+    (comparisonMonth === birth.getUTCMonth() && comparisonDay < birth.getUTCDate())
+  ) {
+    age -= 1;
+  }
+
+  return age;
+}
+
+const isDead = Boolean(person.deathDate);
+const today = new Date();
+const birthDateLabel = formatDate(person.birthDate);
+const deathDateLabel = formatDate(person.deathDate);
+const currentAge = person.birthDate ? getAgeOnDate(person.birthDate, today) : undefined;
+const ageAtDeath =
+  person.birthDate && person.deathDate ? getAgeOnDate(person.birthDate, parseIsoDate(person.deathDate)) : undefined;
+---
+
+<article
+  class:list={["person-card", isDead && "is-dead"]}
+  style={`transform: translate(${x}px, ${y}px); width: ${width}px; height: ${height}px;`}
+>
+  <SignMedia fullName={person.fullName} stillSrc={stillSrc} motionSrc={motionSrc} />
+
+  <div class="copy">
+    <div class="heading">
+      <h3>{person.fullName}</h3>
+    </div>
+    <p class="sign-name">Tegnnavn: {person.signName}</p>
+    {
+      person.birthDate && birthDateLabel && (
+        <p class="meta">
+          Født {birthDateLabel}
+          {!isDead && currentAge !== undefined && ` (${currentAge} år)`}
+        </p>
+      )
+    }
+    {isDead && deathDateLabel && <p class="meta">Døde {deathDateLabel} ({ageAtDeath} år)</p>}
+    {person.notes && <p class="notes">{person.notes}</p>}
+  </div>
+
+  {
+    person.canSignLanguage && (
+      <span class="sign-badge" title="Kan tegnsprog" aria-label="Kan tegnsprog">
+        <Image
+          src="/media/noun-sign-language-8030848-2.svg"
+          width={40}
+          height={40}
+          alt=""
+          aria-hidden="true"
+          loading="eager"
+        />
+      </span>
+    )
+  }
+</article>
+
+<style>
+  .person-card {
+    position: absolute;
+    z-index: 1;
+    display: grid;
+    align-content: start;
+    gap: 0.85rem;
+    padding: 0.9rem;
+    border-radius: 1.35rem;
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(31, 42, 48, 0.1);
+    box-shadow:
+      0 18px 40px rgba(48, 39, 24, 0.08),
+      0 2px 8px rgba(48, 39, 24, 0.05);
+    backdrop-filter: blur(16px);
+  }
+
+  .person-card.is-dead {
+    background: rgba(245, 242, 236, 0.94);
+  }
+
+  .copy {
+    display: grid;
+    align-content: start;
+    gap: 0.38rem;
+    padding-right: 3rem;
+  }
+
+  .heading {
+    display: flex;
+    gap: 0.8rem;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+
+  h3,
+  p,
+  span {
+    margin: 0;
+  }
+
+  h3 {
+    font-size: 1.02rem;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  .heading span,
+  .sign-name,
+  .meta,
+  .status,
+  .notes {
+    color: #56656b;
+    font-size: 0.92rem;
+    line-height: 1.45;
+  }
+
+  .notes {
+    font-size: 0.84rem;
+  }
+
+  .sign-badge {
+    position: absolute;
+    right: 0.85rem;
+    bottom: 0.85rem;
+    width: 3rem;
+    height: 3rem;
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    background: rgba(18, 104, 86, 0.12);
+    border: 1px solid rgba(31, 42, 48, 0.1);
+  }
+
+  .sign-badge img {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+</style>

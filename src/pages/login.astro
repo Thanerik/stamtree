@@ -1,0 +1,137 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { createAuthCookieValue, getAuthCookieName, getCookieOptions, verifyPassword } from "../lib/auth";
+
+const nextPath = Astro.url.searchParams.get("next") || "/tree";
+const safeNextPath = nextPath.startsWith("/") ? nextPath : "/";
+
+let errorMessage = "";
+
+if (Astro.locals.isAuthenticated) {
+  return Astro.redirect(safeNextPath);
+}
+
+if (Astro.request.method === "POST") {
+  const formData = await Astro.request.formData();
+  const submittedPassword = String(formData.get("password") || "");
+  const submittedNext = String(formData.get("next") || "/tree");
+  const redirectTo = submittedNext.startsWith("/") ? submittedNext : "/tree";
+
+  if (await verifyPassword(submittedPassword)) {
+    Astro.cookies.set(
+      getAuthCookieName(),
+      await createAuthCookieValue(),
+      getCookieOptions(Astro.url),
+    );
+
+    return Astro.redirect(redirectTo);
+  }
+
+  errorMessage = "Forkert adgangskode. Prøv igen.";
+}
+---
+
+<BaseLayout title="Login | Stamtræ" bodyClass="login-body">
+  <main class="login-shell">
+    <section class="login-card">
+      <h1>Indtast adgangskode</h1>
+      <p class="copy">
+        Stamtræet er beskyttet med fælles adgangskode. Ved korrekt kode sendes du videre til den beskyttede visning.
+      </p>
+
+      <form method="post" class="login-form">
+        <input type="hidden" name="next" value={safeNextPath} />
+        <label>
+          <span>Adgangskode</span>
+          <input name="password" type="password" autocomplete="current-password" required />
+        </label>
+        <button type="submit">Åbn stamtræ</button>
+      </form>
+
+      {errorMessage && <p class="error" role="alert">{errorMessage}</p>}
+    </section>
+  </main>
+
+  <style>
+    :global(.login-body) {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      color: #1f2628;
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(35, 104, 89, 0.2), transparent 28rem),
+        linear-gradient(180deg, #f8f4ec, #efe8dc);
+    }
+
+    .login-shell {
+      width: min(100%, 32rem);
+      padding: 1.2rem;
+    }
+
+    .login-card {
+      display: grid;
+      gap: 1rem;
+      padding: 2.1rem;
+      border-radius: 1.9rem;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(41, 52, 57, 0.1);
+      box-shadow: 0 24px 80px rgba(60, 53, 41, 0.12);
+      backdrop-filter: blur(16px);
+    }
+
+    .eyebrow,
+    .copy,
+    .error,
+    label span {
+      margin: 0;
+      color: #556164;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 9vw, 3.3rem);
+      line-height: 0.95;
+      font-family: "Instrument Serif", "Georgia", serif;
+      font-weight: 400;
+    }
+
+    .login-form {
+      display: grid;
+      gap: 1rem;
+    }
+
+    label {
+      display: grid;
+      gap: 0.45rem;
+    }
+
+    input,
+    button {
+      font: inherit;
+    }
+
+    input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 0.9rem 1rem;
+      border-radius: 1rem;
+      border: 1px solid rgba(41, 52, 57, 0.16);
+      background: white;
+    }
+
+    button {
+      border: 0;
+      border-radius: 999px;
+      padding: 0.9rem 1.2rem;
+      background: #1f2628;
+      color: white;
+      cursor: pointer;
+    }
+
+    .error {
+      color: #9d2f2f;
+    }
+  </style>
+</BaseLayout>

@@ -1,0 +1,44 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<BaseLayout title={title} description={description} bodyClass="tree-body">
+  <slot />
+</BaseLayout>
+
+<style is:global>
+  .tree-body {
+    margin: 0;
+    min-height: 100vh;
+    overflow-x: auto;
+    overflow-y: auto;
+    background:
+      linear-gradient(180deg, rgba(252, 250, 244, 0.96), rgba(244, 239, 229, 0.98)),
+      repeating-linear-gradient(
+        90deg,
+        rgba(33, 48, 54, 0.035) 0,
+        rgba(33, 48, 54, 0.035) 1px,
+        transparent 1px,
+        transparent 88px
+      ),
+      repeating-linear-gradient(
+        0deg,
+        rgba(33, 48, 54, 0.025) 0,
+        rgba(33, 48, 54, 0.025) 1px,
+        transparent 1px,
+        transparent 88px
+      );
+    color: #1f2a30;
+    font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+  }
+  .tree-body * {
+    box-sizing: border-box;
+  }
+</style>

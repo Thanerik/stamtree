@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-labelledby="title desc">
+  <title id="title">Placeholder sign image</title>
+  <desc id="desc">Neutral placeholder for a sign-language name clip.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" x2="100%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#efe1bf" />
+      <stop offset="100%" stop-color="#d7c1a0" />
+    </linearGradient>
+  </defs>
+  <rect width="240" height="240" rx="28" fill="url(#bg)" />
+  <circle cx="120" cy="82" r="34" fill="#3d4850" opacity="0.88" />
+  <path d="M58 192c10-37 38-59 62-59s52 22 62 59" fill="none" stroke="#3d4850" stroke-linecap="round" stroke-width="18" />
+  <path d="M82 108c8 18 24 26 38 26s30-8 38-26" fill="none" stroke="#17594a" stroke-linecap="round" stroke-width="10" />
+  <text x="120" y="220" fill="#213036" font-family="Georgia, serif" font-size="18" text-anchor="middle">Replace with sign GIF</text>
+</svg>

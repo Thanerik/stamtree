@@ -1,0 +1,66 @@
+---
+import type { FamilyTreeData } from "../../lib/family";
+import type { TreeLayout } from "../../lib/tree-layout";
+import PersonCard from "./PersonCard.astro";
+import RelationshipLines from "./RelationshipLines.astro";
+
+interface Props {
+  tree: FamilyTreeData;
+  layout: TreeLayout;
+}
+
+const { tree, layout } = Astro.props;
+---
+
+<div class="tree-frame">
+  <div class="tree-canvas" style={`width:${layout.width}px; height:${layout.height}px;`}>
+    <RelationshipLines width={layout.width} height={layout.height} connectors={layout.connectors} />
+
+    {layout.cards.map((card) => (
+      <PersonCard
+        person={tree.people[card.personId]}
+        x={card.x}
+        y={card.y}
+        width={card.width}
+        height={card.height}
+      />
+    ))}
+  </div>
+</div>
+
+<script>
+  for (const image of document.querySelectorAll(".sign-media")) {
+    const still = image.getAttribute("data-still");
+    const motion = image.getAttribute("data-motion");
+    const fallback = image.getAttribute("data-fallback");
+
+    if (!still || !motion) continue;
+
+    image.addEventListener("error", () => {
+      if (!fallback) return;
+
+      const currentSrc = image.getAttribute("src");
+
+      if (currentSrc === still) {
+        image.setAttribute("data-still", fallback);
+        image.setAttribute("src", fallback);
+      }
+    });
+
+    image.addEventListener("mouseenter", () => image.setAttribute("src", motion));
+    image.addEventListener("mouseleave", () => image.setAttribute("src", image.getAttribute("data-still") ?? still));
+    image.addEventListener("focus", () => image.setAttribute("src", motion));
+    image.addEventListener("blur", () => image.setAttribute("src", image.getAttribute("data-still") ?? still));
+  }
+</script>
+
+<style>
+  .tree-frame {
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  .tree-canvas {
+    position: relative;
+  }
+</style>

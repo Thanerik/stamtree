@@ -1,0 +1,36 @@
+---
+import { Image } from "astro:assets";
+
+interface Props {
+  fullName: string;
+  stillSrc: string;
+  motionSrc: string;
+}
+
+const { fullName, stillSrc, motionSrc } = Astro.props;
+const fallbackSrc = "/media/sign-placeholder.svg";
+---
+
+<Image
+  class="sign-media"
+  src={stillSrc}
+  data-still={stillSrc}
+  data-motion={motionSrc}
+  data-fallback={fallbackSrc}
+  alt={`Tegnmedie for ${fullName}`}
+  loading="eager"
+  width="248"
+  height="215"
+/>
+
+<style>
+  .sign-media {
+    display: block;
+    width: 100%;
+    aspect-ratio: 31 / 20;
+    object-fit: cover;
+    border-radius: 1rem;
+    border: 1px solid rgba(31, 42, 48, 0.12);
+    background: linear-gradient(135deg, #ece3d4, #d4c6b2);
+  }
+</style>
