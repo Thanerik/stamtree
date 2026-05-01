@@ -13,8 +13,8 @@ interface Props {
 
 const { person, x, y, width, height } = Astro.props;
 
-const stillSrc = `/media/${person.id}.jpg`;
-const motionSrc = `/media/${person.id}.gif`;
+const stillSrc = `/stamtree/media/${person.id}.jpg`;
+const motionSrc = `/stamtree/media/${person.id}.gif`;
 const dateFormatter = new Intl.DateTimeFormat("da-DK", {
   day: "numeric",
   month: "short",
@@ -85,7 +85,7 @@ const ageAtDeath =
     person.canSignLanguage && (
       <span class="sign-badge" title="Kan tegnsprog" aria-label="Kan tegnsprog">
         <Image
-          src="/media/noun-sign-language-8030848-2.svg"
+          src="/stamtree/media/noun-sign-language-8030848-2.svg"
           width={40}
           height={40}
           alt=""

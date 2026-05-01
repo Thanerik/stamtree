@@ -1,6 +1,6 @@
 ---
 import FamilyTree from "../components/family/FamilyTree.astro";
-import ProtectedLayout from "../layouts/ProtectedLayout.astro";
+import TreeLayout from "../layouts/TreeLayout.astro";
 import { getFamilyTreeData } from "../lib/family";
 import { buildTreeLayout } from "../lib/tree-layout";
 
@@ -8,17 +8,14 @@ const tree = await getFamilyTreeData();
 const layout = buildTreeLayout(tree);
 ---
 
-<ProtectedLayout
+<TreeLayout
   title="Stamtræ"
-  description="Privat, adgangsbeskyttet stamtræ med tegnnavne og fleksible SVG-relationer."
+  description="Stamtræ med tegnnavne og fleksible SVG-relationer."
 >
   <main class="tree-page">
     <header class="masthead">
       <div class="intro">
         <h1>Stamtræ</h1>
-        <form class="logout" action="/logout" method="get">
-          <button type="submit">Log ud</button>
-        </form>
         <p class="lede">
           Familiestruktur over børn, børnebørn og videre fra Helle og Einar. Med fødselsdato og tegnnavn hvis muligt. Tegnsprogsbadge på alle personer der kan tegnsprog.
         </p>
@@ -50,10 +47,6 @@ const layout = buildTreeLayout(tree);
       background: rgba(255, 255, 255, 0.7);
       border: 1px solid rgba(31, 42, 48, 0.08);
       backdrop-filter: blur(10px);
-    }
-
-    .logout {
-      float: right;
     }
 
     .eyebrow,
@@ -112,16 +105,6 @@ const layout = buildTreeLayout(tree);
       font-size: 0.94rem;
     }
 
-    button {
-      border: 0;
-      border-radius: 999px;
-      padding: 0.8rem 1.15rem;
-      font: inherit;
-      color: white;
-      background: #1f2a30;
-      cursor: pointer;
-    }
-
     @media (max-width: 980px) {
       .masthead,
       .notes {
@@ -129,4 +112,4 @@ const layout = buildTreeLayout(tree);
       }
     }
   </style>
-</ProtectedLayout>
+</TreeLayout>
