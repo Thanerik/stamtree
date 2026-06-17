@@ -13,7 +13,7 @@ const familyPeople = defineCollection({
     canSignLanguage: z.boolean().default(false),
     birthDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
     deathDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-    notes: z.string().optional(),
+    notes: z.string().max(1000).optional(),
   }),
 });
 
